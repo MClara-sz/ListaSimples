@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                     etnovatarefa.isEnabled = false
                     btadd.isVisible = false
                     tvtitulo.isVisible = true
+                    
                 }
             }
                 //listener para eventos de clique longi em algum item de lista
