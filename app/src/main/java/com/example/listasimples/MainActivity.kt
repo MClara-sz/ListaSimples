@@ -6,8 +6,11 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,29 +19,37 @@ class MainActivity : AppCompatActivity() {
 
             val etnovatarefa = findViewById<EditText>(R.id.etnovatarefa)
             val btadd = findViewById<Button>(R.id.btadd)
+            val tvtitulo = findViewById<TextView>(R.id.tvtitulo)
             val lvtarefas = findViewById<ListView>(R.id.lvtarefas)
 
-            //aqui criamos a lista de Strings, iniciqalmente vazia
-            val listatarefas: ArrayList<String> = ArrayList()
+            val fab = findViewById<FloatingActionButton>(R.id.fab)
+            fab.setOnClickListener {
+                tvtitulo.isVisible = false
+                etnovatarefa.isVisible = true
+                etnovatarefa.isEnabled = true
+                btadd.isVisible = true
+            }
 
-            //p trabalhar com listas precisamo de um adaptador
-            //um componentes adicional do android  p laypout de listas
-
-            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listatarefas)
-
-            //aqui o adapter de listviewa recebe o adapter que criamos
+            val listaTarefas: ArrayList<String> = ArrayList()
+            val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listaTarefas)
             lvtarefas.adapter = adapter
 
+
             btadd.setOnClickListener {
-                if (etnovatarefa.text.isNullOrBlank()) {
+                if (etnovatarefa.text.isNullOrEmpty()) {
                     Toast.makeText(this, "digite uma tarefa ", Toast.LENGTH_SHORT).show()
                 } else {
-                    listatarefas.add(etnovatarefa.text.toString())
+                    listaTarefas.add(etnovatarefa.text.toString())
                     //notific ao adapter que tivemos alteracao nas listas
                     //notificado ele atiualiza os novoas elementos da lista na tela
                     adapter.notifyDataSetChanged()
                     etnovatarefa.setText("")
+                    etnovatarefa.isVisible = false
+                    etnovatarefa.isEnabled = false
+                    btadd.isVisible = false
+                    tvtitulo.isVisible = true
                 }
+            }
                 //listener para eventos de clique longi em algum item de lista
                 //passamos para a funcao de callback e pposicao de item clicado
                 lvtarefas.setOnItemLongClickListener { _, _, position, _ ->
@@ -49,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                     alerta.setPositiveButton("confirmar") {dialog, _ ->
 
                         //case obotao confirmar seja clicado , remover o item da lista
-                        listatarefas.removeAt(position)
+                        listaTarefas.removeAt(position)
                         adapter.notifyDataSetChanged()
                         dialog.dismiss()        }
                         alerta.setNegativeButton("cancelar") { dialog, _ ->
@@ -64,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
 
-            }
+
 
 
 
